@@ -429,17 +429,18 @@
 </head>
 <body class="text-gray-800"> <!-- text-gray-800 is a fallback, colors primarily from CSS vars -->
 
-    <div id="languageNameModal" class="fixed inset-0 z-50 flex items-center justify-center modal">
-        <div class="modal-content p-6 rounded-lg shadow-xl w-full max-w-md">
-            <h2 class="text-2xl font-bold mb-4 text-center">👋 ยินดีต้อนรับสู่โปรแกรมประดิษฐภาษา!</h2>
-            
-            <div id="existingLanguageLoaderSectionModal" class="hidden mb-3">
-                 <p class="mb-1 text-center text-sm">เลือกภาษาที่สร้างไว้แล้ว:</p>
-                 <select id="modalExistingLanguageSelector" class="w-full p-2 border rounded-md mb-2"></select>
-                 <button id="loadSelectedLangFromModalBtn" class="w-full btn-secondary py-2 px-4 rounded-md font-semibold mb-2 text-sm">โหลดภาษาที่เลือก</button>
-                 <hr class="my-3">
-                 <p class="mb-1 text-center text-sm">หรือสร้างภาษาใหม่:</p>
-            </div>
+    <div id="languageNameModal" class="fixed inset-0 z-50 flex items-center justify-center modal bg-black bg-opacity-50">
+    <div class="modal-content relative p-6 rounded-lg shadow-xl w-full max-w-md bg-white">
+        <!-- ปุ่มปิด -->
+        <button id="closeLanguageModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl font-bold">&times;</button>
+
+        <h2 class="text-2xl font-bold mb-4 text-center">👋 ยินดีต้อนรับสู่โปรแกรมประดิษฐภาษา!</h2>
+        <p class="mb-4 text-center">กรุณาตั้งชื่อภาษาของคุณก่อนเริ่มใช้งาน:</p>
+        <input type="text" id="languageNameInput" class="w-full p-2 border border-purple-300 rounded-md mb-4 focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="เช่น 'เอลฟิช', 'มังกรลิ้น'">
+        <button id="submitLanguageName" class="w-full btn-primary py-2 px-4 rounded-md font-semibold">เริ่มสร้างภาษา ✨</button>
+    </div>
+</div>
+
 
             <p class="mb-2 text-center">กรุณาตั้งชื่อภาษาของคุณ:</p>
             <input type="text" id="languageNameInput" class="w-full p-2 border rounded-md mb-3 focus:ring-2 focus:border-transparent" placeholder="เช่น 'นาคภาษ', 'สวาดิท'">
@@ -4348,5 +4349,16 @@
         }
 
     </script>
+    <script>
+    // เปิด modal
+    document.getElementById('openLanguageModal').addEventListener('click', function () {
+        document.getElementById('languageNameModal').style.display = 'flex';
+    });
+
+    // ปิด modal
+    document.getElementById('closeLanguageModal').addEventListener('click', function () {
+        document.getElementById('languageNameModal').style.display = 'none';
+    });
+</script>
 </body>
 </html>
