@@ -624,9 +624,26 @@
 
     <script>
         // --- Global State and Data Structures ---
-        const API_URL = "https://script.google.com/macros/s/AKfycbyQt6pWFF_y0LZBA38C8VheADB-bud0PshyYiUehFTWZxWUqzB5d0n_EzmMA7MDwAYnwQ/exec";
-        let thaiWordDatabase = []; // Will store {word: string, pos: string, meaning: string}
 
+let dictionaryWordList = [];
+
+async function loadLocalDictionary() {
+    try {
+        const response = await fetch('dictionary.json');
+        const data = await response.json();
+        dictionaryWordList = data.map(item => item["คำศัพท์"]);
+        console.log("Loaded dictionary.json:", dictionaryWordList.length, "words");
+    } catch (error) {
+        console.error("ไม่สามารถโหลด dictionary.json:", error);
+        dictionaryWordList = [];
+    }
+}
+
+function getRandomMeaning() {
+    if (dictionaryWordList.length === 0) return "N/A";
+    return dictionaryWordList[Math.floor(Math.random() * dictionaryWordList.length)];
+}        
+        
         const DEFAULT_BASE_PARTS_OF_SPEECH = Object.freeze(['คำนาม', 'คำกริยา', 'คำคุณศัพท์', 'คำสรรพนาม', 'คำวิเศษณ์', 'คำบุพบท', 'คำสันธาน', 'คำอุทาน']);
         const DEFAULT_BASE_NOUN_GENDERS = Object.freeze(['ปุงลิงค์', 'อิตถีลิงค์', 'นปุงสกลิงค์']);
         const DEFAULT_BASE_DIALECT_REGIONS = Object.freeze(['มาตรฐาน', 'เหนือ', 'ใต้', 'ตะวันออก', 'ตะวันตก']);
@@ -770,7 +787,7 @@
         // --- Initialization ---
         window.onload = async () => {
             initTheme();
-            await fetchThaiWordDatabase();
+            await loadLocalDictionary();
             loadData();
 
             if (allLanguages.length === 0) {
@@ -868,22 +885,21 @@
 
         async function fetchThaiWordDatabase() {
             try {
-                const response = await fetch(`${API_URL}?action=findAllRegister`);
+                const response = await fetch(`${dictionary.json}?action=findAllRegister`);
                 const result = await response.json();
                 if (result.success && Array.isArray(result.data)) {
-                    thaiWordDatabase = result.data.map(item => ({
+                    LocalDictionary = result.data.map(item => ({
                         word: item.คำศัพท์ || "N/A", 
-                        pos: item.ประเภทของคำ || "N/A",
-                        meaning: item.ความหมาย || "N/A",
+                             
                     }));
-                    console.log("Thai word database loaded:", thaiWordDatabase.length, "entries");
+                    console.log("Thai word database loaded:", LocalDictionary.length, "entries");
                 } else {
                     console.error("Failed to load Thai word database or data is not an array:", result.message, result.error);
-                    thaiWordDatabase = [];
+                   LocalDictionary = [];
                 }
             } catch (error) {
                 console.error("Error fetching Thai word database:", error);
-                thaiWordDatabase = [];
+                LocalDictionary = [];
             }
         }
 
